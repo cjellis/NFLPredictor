@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>NFL Predictor</title>
+
+    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/index.css') }}">
+
+
+    <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.js"></script>
+</head>
+<script>
+    function setHtml(algo, data) {
+        var algo_elem = document.getElementById(algo);
+        algo_elem.innerHTML = data;
+    }
+
+    function makeRequestForBasicOrMid(algo, week) {
+        var xmlhttp = new XMLHttpRequest();
+        var url = location.pathname.substr(0, location.pathname.indexOf('/')) + "/" + algo + "/guessWeek/" + week;
+
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                data =  JSON.parse(xmlhttp.responseText).data;
+                setHtml(algo, data);
+            }
+        };
+        xmlhttp.open("GET", url, true);
+        xmlhttp.send();
+    }
+
+    function makeRequestForCustom(algo, week) {
+        var xmlhttp = new XMLHttpRequest();
+        var url = location.pathname.substr(0, location.pathname.indexOf('/')) + "/custom/" + algo + "/guessWeek/" + week;
+
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                data =  JSON.parse(xmlhttp.responseText).data;
+                setHtml(algo, data);
+            }
+        };
+        xmlhttp.open("GET", url, true);
+        xmlhttp.send();
+    }
+
+    function goToAlgorithm() {
+        var week = document.getElementById("week").value;
+        makeRequestForBasicOrMid("basic", week);
+        makeRequestForBasicOrMid("mid", week);
+        makeRequestForCustom("patriots", week);
+        makeRequestForCustom("packers", week);
+        makeRequestForCustom("panthers", week);
+        //makeRequestForCustom("eagles", week);
+    }
+
+</script>
+<body>
+<div class="wrapper">
+    <div style="margin-bottom: 15px; color: red; text-align: center ">
+        <h1 style="font-size: 42px">Welcome to NFL Predictor!</h1>
+    </div>
+    <div style="margin-left:10%; margin-right: 10%; text-align: center;">
+        Choose Week:
+        <select id="week" class="form-control" style="width: 75px; display: inline-block;">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+            <option value="13">13</option>
+            <option value="14">14</option>
+            <option value="15">15</option>
+            <option value="16">16</option>
+            <option value="17">17</option>
+        </select>
+
+        <button type="button" onclick="goToAlgorithm()" class="btn btn-default">Predict!</button>
+    </div>
+
+    <div style="margin-left:10%; margin-right: 10%">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#basic" data-toggle="tab">Basic</a></li>
+            <li><a href="#mid" data-toggle="tab">Mid</a></li>
+            <li><a href="#patriots" data-toggle="tab">Patriots</a></li>
+            <li><a href="#packers" data-toggle="tab">Packers</a></li>
+            <li><a href="#panthers" data-toggle="tab">Panthers</a></li>
+{#            <li><a href="#eagles" data-toggle="tab">Eagles</a></li>#}
+        </ul>
+    </div>
+    <div class="tab-content">
+        <div class="tab-pane active tabBody" id="basic">
+        </div>
+        <div class="tab-pane tabBody" id="mid">
+        </div>
+        <div class="tab-pane tabBody" id="patriots">
+        </div>
+        <div class="tab-pane tabBody" id="packers">
+        </div>
+        <div class="tab-pane tabBody" id="panthers">
+        </div>
+{#        <div class="tab-pane tabBody" id="eagles">#}
+{#        </div>#}
+    </div>
+</div>
+</body>
+</html>
