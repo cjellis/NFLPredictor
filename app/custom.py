@@ -345,8 +345,12 @@ def determine_winner_and_update_record(game, string, stats):
         if total is not 0:
             home_percent = home_stats_totals.get(stat) / total
             away_percent = away_stats_totals.get(stat) / total
-        home_points += home_percent * value
-        away_points += away_percent * value
+        if stat is 'passing_ints' or stat is 'funbles_lost' or stat is 'fumbles_tot':
+            home_points += (1 - home_percent) * value
+            away_points += (1 - away_percent) * value
+        else:
+            home_points += home_percent * value
+            away_points += away_percent * value
 
     if away_points > home_points:
         string += "<div>{0} @ {1}</div> <div> Winner: {2}</div>".format(away, home, away)
